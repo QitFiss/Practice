@@ -64,7 +64,7 @@ class StudentIJDBCDao implements IDAO<Student> {
             preparedStatement.setInt(2,student.weight);
             preparedStatement.setInt(3,student.height);
             preparedStatement.setInt(4,student.group_Id);
-            result= preparedStatement.execute(sql);
+            result= preparedStatement.execute();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -79,13 +79,14 @@ class StudentIJDBCDao implements IDAO<Student> {
         boolean result = false;
         try {
             Statement statement = connection.createStatement();
-            result = statement.execute(
-                    "UPDATE university.student" +
-                            "SET studentname = '" + student.getName() +
-                            "SET studentweight = '" + student.getWeight() +
-                            "SET studentheight = '" + student.getHeight() +
-                            "SET group_Id = '" + student.getGroup_Id() +
-                            "WHERE id = " + student.getId() + ";");
+            String sql="update university.student set studentname = (?),studentweight=(?),studentheight=(?),group_Id=(?) where idstudent=(?);";
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,student.name);
+            preparedStatement.setInt(2,student.weight);
+            preparedStatement.setInt(3,student.height);
+            preparedStatement.setInt(4,student.group_Id);
+            preparedStatement.setInt(5,student.id);
+            result= preparedStatement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
